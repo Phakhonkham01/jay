@@ -92,6 +92,7 @@
             <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                 <a href="#hero" class="hover:text-neonCyan transition-colors">Home</a>
                 <a href="#about" class="hover:text-neonCyan transition-colors">About</a>
+                <a href="#gallery" class="hover:text-neonCyan transition-colors">Gallery</a>
                 <a href="#projects" class="hover:text-neonCyan transition-colors">Projects</a>
                 <a href="#interactive" class="hover:text-neonCyan transition-colors">Visualizer & Game</a>
                 <a href="#contact" class="px-5 py-2.5 rounded-xl border border-neonCyan/50 text-neonCyan hover:bg-neonCyan/10 glow-btn transition-all">Connect</a>
@@ -105,6 +106,7 @@
         <div id="mobile-menu" class="hidden md:hidden bg-cardBg/95 backdrop-blur-lg border-b border-slate-800 px-6 py-6 space-y-4">
             <a href="#hero" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Home</a>
             <a href="#about" class="block text-lg hover:text-neonCyan transition-colors mobile-link">About</a>
+            <a href="#gallery" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Gallery</a>
             <a href="#projects" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Projects</a>
             <a href="#interactive" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Visualizer & Game</a>
             <a href="#contact" class="block text-lg text-neonCyan font-semibold mobile-link">Connect</a>
@@ -314,6 +316,30 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 px-6 max-w-6xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="font-display font-bold text-3xl md:text-4xl uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple">
+                // Gallery
+            </h2>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
+                Snapshots from JAYJAY's world.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="rounded-3xl overflow-hidden border border-slate-800 hover:border-neonCyan transition-all bg-cardBg aspect-[3/4]">
+                <video src="assets/video1.mp4" class="w-full h-full object-cover" autoplay muted loop playsinline></video>
+            </div>
+            <div class="rounded-3xl overflow-hidden border border-slate-800 hover:border-neonPurple transition-all bg-cardBg aspect-[3/4]">
+                <img src="assets/photo1.jpeg" alt="JAYJAY fixing a motorbike" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+            </div>
+            <div class="rounded-3xl overflow-hidden border border-slate-800 hover:border-neonGreen transition-all bg-cardBg aspect-[3/4]">
+                <img src="assets/photo2.jpeg" alt="JAYJAY and a friend in class" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+            </div>
         </div>
     </section>
 
