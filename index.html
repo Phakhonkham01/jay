@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAYJAY's World // Futuristic Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        neonCyan: '#00f0ff',
+                        neonPurple: '#b026ff',
+                        neonGreen: '#39ff14',
+                        darkBg: '#080810',
+                        cardBg: '#12121f'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #080810;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        .glow-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+        .glow-text-purple {
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.7), 0 0 20px rgba(176, 38, 255, 0.4);
+        }
+        .glow-box-cyan {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+        .glow-box-purple {
+            box-shadow: 0 0 25px rgba(176, 38, 255, 0.3), inset 0 0 15px rgba(176, 38, 255, 0.1);
+        }
+        .glow-btn {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .glow-btn:hover {
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 10px rgba(57, 255, 20, 0.5);
+            transform: translateY(-2px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080810;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e1e38;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 font-sans antialiased selection:bg-neonCyan selection:text-black">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-darkBg/80 backdrop-blur-md border-b border-slate-800/80 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#hero" class="font-display font-black text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen">
+                JAYJAY.SYS
+            </a>
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#hero" class="hover:text-neonCyan transition-colors">Home</a>
+                <a href="#about" class="hover:text-neonCyan transition-colors">About</a>
+                <a href="#projects" class="hover:text-neonCyan transition-colors">Projects</a>
+                <a href="#interactive" class="hover:text-neonCyan transition-colors">Visualizer & Game</a>
+                <a href="#contact" class="px-5 py-2.5 rounded-xl border border-neonCyan/50 text-neonCyan hover:bg-neonCyan/10 glow-btn transition-all">Connect</a>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <button id="menu-btn" class="md:hidden text-2xl text-neonCyan focus:outline-none">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cardBg/95 backdrop-blur-lg border-b border-slate-800 px-6 py-6 space-y-4">
+            <a href="#hero" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Home</a>
+            <a href="#about" class="block text-lg hover:text-neonCyan transition-colors mobile-link">About</a>
+            <a href="#projects" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Projects</a>
+            <a href="#interactive" class="block text-lg hover:text-neonCyan transition-colors mobile-link">Visualizer & Game</a>
+            <a href="#contact" class="block text-lg text-neonCyan font-semibold mobile-link">Connect</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
+        <!-- Particle Canvas Background -->
+        <canvas id="particle-canvas"></canvas>
+        
+        <!-- Glowing gradient blobs in background -->
+        <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-neonCyan/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neonPurple/10 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+            <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-slate-900/80 border border-neonCyan/30 text-neonCyan text-xs md:text-sm font-mono tracking-widest uppercase">
+                <span class="w-2 h-2 rounded-full bg-neonGreen animate-ping"></span>
+                <span>System Online // Welcome Visitor</span>
+            </div>
+            
+            <h1 class="font-display font-black text-4xl sm:text-6xl md:text-7xl tracking-wider uppercase leading-tight">
+                WELCOME TO <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen glow-text-cyan">
+                    JAYJAY'S WORLD
+                </span>
+            </h1>
+
+            <div class="h-12 flex items-center justify-center">
+                <p class="text-lg md:text-2xl text-slate-300 font-mono">
+                    <span id="typing-text" class="border-r-2 border-neonCyan pr-2"></span>
+                </p>
+            </div>
+
+            <p class="max-w-xl mx-auto text-slate-400 text-sm md:text-base leading-relaxed">
+                Step into a digital dimension crafted with high-performance code, immersive visuals, and futuristic web experiences. Built by JAYJAY.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#projects" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-neonCyan to-neonPurple text-black font-bold text-sm tracking-wider uppercase glow-btn hover:opacity-90 transition-all flex items-center justify-center space-x-2">
+                    <span>Explore Projects</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#interactive" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-700 hover:border-neonCyan text-slate-200 font-bold text-sm tracking-wider uppercase transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-gamepad text-neonCyan"></i>
+                    <span>Launch Widget</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll down indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2 opacity-60 hover:opacity-100 transition-opacity">
+            <span class="text-xs uppercase tracking-widest text-slate-400 font-mono">Scroll</span>
+            <div class="w-5 h-9 rounded-full border-2 border-slate-500 flex items-start justify-center p-1">
+                <div class="w-1.5 h-2 bg-neonCyan rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section with Tabs -->
+    <section id="about" class="py-24 px-6 relative max-w-6xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="font-display font-bold text-3xl md:text-4xl uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple">
+                // About JAYJAY
+            </h2>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
+                Discover the core parameters, capabilities, and personal drives behind the interface.
+            </p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+            <button onclick="switchTab('bio')" id="btn-bio" class="tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-neonCyan/20 text-neonCyan border border-neonCyan glow-box-cyan">
+                <i class="fa-solid fa-user-astronaut mr-2"></i> Bio
+            </button>
+            <button onclick="switchTab('skills')" id="btn-skills" class="tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-cardBg text-slate-400 border border-slate-800 hover:border-slate-600">
+                <i class="fa-solid fa-microchip mr-2"></i> Skills
+            </button>
+            <button onclick="switchTab('hobbies')" id="btn-hobbies" class="tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-cardBg text-slate-400 border border-slate-800 hover:border-slate-600">
+                <i class="fa-solid fa-Gamepad mr-2"></i> Hobbies
+            </button>
+            <button onclick="switchTab('contact')" id="btn-contact" class="tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-cardBg text-slate-400 border border-slate-800 hover:border-slate-600">
+                <i class="fa-solid fa-terminal mr-2"></i> Contact Info
+            </button>
+        </div>
+
+        <!-- Tab Content Card -->
+        <div class="bg-cardBg/90 border border-slate-800 rounded-3xl p-8 md:p-12 glow-box-purple backdrop-blur-xl relative overflow-hidden transition-all duration-300">
+            <!-- Decorative header line -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen"></div>
+
+            <!-- Tab 1: Bio -->
+            <div id="tab-bio" class="tab-content space-y-6">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-36 h-36 rounded-2xl bg-gradient-to-br from-neonCyan to-neonPurple p-1 flex-shrink-0">
+                        <div class="w-full h-full bg-cardBg rounded-2xl flex items-center justify-center overflow-hidden">
+                            <i class="fa-solid fa-user-secret text-6xl text-neonCyan"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-center md:text-left">
+                        <h3 class="font-display font-bold text-2xl text-slate-100">JAYJAY // Digital Architect</h3>
+                        <p class="text-slate-300 leading-relaxed">
+                            I am a passionate creator, designer, and developer navigating the infinite expanse of cyberspace. My mission is to bridge the gap between high-tech futuristic design and buttery-smooth user experiences. Whether crafting immersive web apps, experimenting with audio-visualizers, or building interactive digital spaces, JAYJAY's world is always evolving.
+                        </p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-4 text-xs font-mono text-neonCyan">
+                            <span class="px-3 py-1 rounded bg-slate-900 border border-neonCyan/30">📍 Cyberpunk Grid</span>
+                            <span class="px-3 py-1 rounded bg-slate-900 border border-neonCyan/30">⚡ Status: Operational</span>
+                            <span class="px-3 py-1 rounded bg-slate-900 border border-neonCyan/30">🚀 Vibe: Futuristic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Skills -->
+            <div id="tab-skills" class="tab-content hidden space-y-6">
+                <h3 class="font-display font-bold text-xl text-slate-200 mb-6">Technical Capabilities</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-mono">
+                            <span>Frontend Architecture & UI/UX</span>
+                            <span class="text-neonCyan">95%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r from-neonCyan to-neonPurple h-full rounded-full" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-mono">
+                            <span>Interactive JavaScript & Canvas</span>
+                            <span class="text-neonPurple">90%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r from-neonPurple to-neonGreen h-full rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-mono">
+                            <span>Tailwind CSS & Responsive Design</span>
+                            <span class="text-neonGreen">98%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r from-neonCyan to-neonGreen h-full rounded-full" style="width: 98%"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm font-mono">
+                            <span>Creative Coding & Audio Synthetics</span>
+                            <span class="text-neonCyan">85%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r from-neonPurple to-neonCyan h-full rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Hobbies -->
+            <div id="tab-hobbies" class="tab-content hidden space-y-6">
+                <h3 class="font-display font-bold text-xl text-slate-200 mb-6">Offline & Online Pursuits</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-neonCyan transition-all text-center space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-neonCyan/10 text-neonCyan mx-auto flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-headphones"></i>
+                        </div>
+                        <h4 class="font-semibold text-slate-200">Synthwave & EDM</h4>
+                        <p class="text-xs text-slate-400">Crafting and listening to futuristic electronic soundscapes.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-neonPurple transition-all text-center space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-neonPurple/10 text-neonPurple mx-auto flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h4 class="font-semibold text-slate-200">Retro & Cyber Games</h4>
+                        <p class="text-xs text-slate-400">Challenging high scores and exploring immersive indie game worlds.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-neonGreen transition-all text-center space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-neonGreen/10 text-neonGreen mx-auto flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h4 class="font-semibold text-slate-200">Open Source Hackathons</h4>
+                        <p class="text-xs text-slate-400">Building fast experiments and sharing code with the community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Contact Info -->
+            <div id="tab-contact" class="tab-content hidden space-y-6 text-center md:text-left">
+                <h3 class="font-display font-bold text-xl text-slate-200 mb-4">Direct Communication Channels</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-lg bg-neonCyan/20 text-neonCyan flex items-center justify-center">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 font-mono block">SECURE EMAIL</span>
+                            <span class="text-sm font-semibold text-slate-200">jayjay@cyberworld.io</span>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-lg bg-neonPurple/20 text-neonPurple flex items-center justify-center">
+                            <i class="fa-brands fa-github"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 font-mono block">GITHUB REPO</span>
+                            <span class="text-sm font-semibold text-slate-200">github.com/jayjay-sys</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="font-display font-bold text-3xl md:text-4xl uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen">
+                // Featured Projects
+            </h2>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
+                Explore a curated gallery of digital systems and web experiences engineered by JAYJAY.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="bg-cardBg border border-slate-800 rounded-3xl overflow-hidden group hover:border-neonCyan transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="h-48 bg-gradient-to-br from-indigo-900 via-slate-900 to-black relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+                        <i class="fa-solid fa-cube text-6xl text-neonCyan group-hover:scale-110 transition-transform duration-300"></i>
+                        <span class="absolute top-4 right-4 text-xs font-mono px-3 py-1 rounded-full bg-neonCyan/20 text-neonCyan border border-neonCyan/40">WebGL</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-display font-bold text-xl text-slate-100 group-hover:text-neonCyan transition-colors">Neon 3D Universe</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            An immersive three-dimensional particle simulation responding in real-time to mouse acceleration and audio frequencies.
+                        </p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0 flex items-center justify-between">
+                    <div class="flex space-x-2 text-xs font-mono text-slate-500">
+                        <span>Three.js</span> • <span>GLSL</span>
+                    </div>
+                    <button onclick="openModal('Neon 3D Universe', 'An immersive three-dimensional particle simulation responding in real-time to mouse acceleration and audio frequencies. Built with Three.js and custom GLSL shaders for maximum visual fidelity.', 'https://github.com/jayjay-sys/neon-3d-universe')" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-neonCyan text-neonCyan text-xs font-mono uppercase tracking-wider transition-all">
+                        Inspect <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="bg-cardBg border border-slate-800 rounded-3xl overflow-hidden group hover:border-neonPurple transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="h-48 bg-gradient-to-br from-purple-950 via-slate-900 to-black relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-[radial-gradient(#b026ff_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+                        <i class="fa-solid fa-brain text-6xl text-neonPurple group-hover:scale-110 transition-transform duration-300"></i>
+                        <span class="absolute top-4 right-4 text-xs font-mono px-3 py-1 rounded-full bg-neonPurple/20 text-neonPurple border border-neonPurple/40">AI Interface</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-display font-bold text-xl text-slate-100 group-hover:text-neonPurple transition-colors">CyberMind Chat</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            A neural-net themed AI assistant interface with futuristic animations, streaming response simulation, and sleek glassmorphic controls.
+                        </p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0 flex items-center justify-between">
+                    <div class="flex space-x-2 text-xs font-mono text-slate-500">
+                        <span>Tailwind</span> • <span>JS API</span>
+                    </div>
+                    <button onclick="openModal('CyberMind Chat', 'A neural-net themed AI assistant interface featuring futuristic sound effects, streaming markdown formatting, and fully customizable cybernetic color themes.', 'https://github.com/jayjay-sys/cybermind-chat')" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-neonPurple text-neonPurple text-xs font-mono uppercase tracking-wider transition-all">
+                        Inspect <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="bg-cardBg border border-slate-800 rounded-3xl overflow-hidden group hover:border-neonGreen transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="h-48 bg-gradient-to-br from-emerald-950 via-slate-900 to-black relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-[radial-gradient(#39ff14_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+                        <i class="fa-solid fa-bolt text-6xl text-neonGreen group-hover:scale-110 transition-transform duration-300"></i>
+                        <span class="absolute top-4 right-4 text-xs font-mono px-3 py-1 rounded-full bg-neonGreen/20 text-neonGreen border border-neonGreen/40">Tooling</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="font-display font-bold text-xl text-slate-100 group-hover:text-neonGreen transition-colors">Quantum Dashboard</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            High-frequency metrics monitoring dashboard with live charts, custom alerting triggers, and zero-latency UI updates.
+                        </p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0 flex items-center justify-between">
+                    <div class="flex space-x-2 text-xs font-mono text-slate-500">
+                        <span>Canvas</span> • <span>Analytics</span>
+                    </div>
+                    <button onclick="openModal('Quantum Dashboard', 'High-frequency metrics monitoring dashboard built for real-time telemetry analysis, featuring customizable widgets, dark mode toggle, and WebSocket data streams.', 'https://github.com/jayjay-sys/quantum-dashboard')" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-neonGreen text-neonGreen text-xs font-mono uppercase tracking-wider transition-all">
+                        Inspect <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Widgets Section -->
+    <section id="interactive" class="py-24 px-6 max-w-6xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="font-display font-bold text-3xl md:text-4xl uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen">
+                // Interactive Playzone
+            </h2>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto">
+                Test out JAYJAY's custom audio visualizer simulation or play the Cyber-Clicker challenge!
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Widget 1: Sound / Music Visualizer Simulation -->
+            <div class="bg-cardBg border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between glow-box-cyan">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-neonCyan/20 text-neonCyan flex items-center justify-center">
+                                <i class="fa-solid fa-wave-square"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-xl text-slate-100">Audio Synth Visualizer</h3>
+                        </div>
+                        <span id="visualizer-status" class="text-xs font-mono px-3 py-1 rounded-full bg-slate-900 text-slate-400 border border-slate-700">Paused</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Simulated audio frequency bars pulsing in cybernetic neon frequencies. Toggle the synthesizer simulation to watch it react.
+                    </p>
+                </div>
+
+                <!-- Canvas Visualizer Display -->
+                <div class="my-6 bg-black/60 rounded-2xl border border-slate-800 h-48 relative overflow-hidden flex items-end justify-center p-4 gap-1.5" id="visualizer-bars">
+                    <!-- Bars generated via JS -->
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <button id="toggle-visualizer" onclick="toggleVisualizer()" class="px-6 py-3 rounded-xl bg-neonCyan text-black font-bold text-xs font-mono uppercase tracking-wider glow-btn flex items-center space-x-2">
+                        <i class="fa-solid fa-play" id="vis-icon"></i>
+                        <span id="vis-btn-text">Start Synthesizer</span>
+                    </button>
+                    <span class="text-xs font-mono text-neonCyan animate-pulse">FREQ: 432Hz // SYNC</span>
+                </div>
+            </div>
+
+            <!-- Widget 2: Mini Clicker Game / Cyber Coin Miner -->
+            <div class="bg-cardBg border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col justify-between glow-box-purple">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-neonPurple/20 text-neonPurple flex items-center justify-center">
+                                <i class="fa-solid fa-coins"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-xl text-slate-100">Cyber Coin Miner</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-mono text-slate-400 block">MINED COINS</span>
+                            <span id="coin-count" class="font-display font-bold text-neonGreen text-xl">0</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Tap the quantum core to mine JAYJAY tokens. Unlock automatic miners to scale up your cyber empire!
+                    </p>
+                </div>
+
+                <!-- Clicker Interactive Area -->
+                <div class="my-6 flex flex-col items-center justify-center py-6">
+                    <button onclick="mineCoin()" class="w-28 h-28 rounded-full bg-gradient-to-br from-neonPurple via-indigo-600 to-neonCyan p-1 glow-btn active:scale-95 transition-transform group flex items-center justify-center">
+                        <div class="w-full h-full bg-darkBg rounded-full flex flex-col items-center justify-center space-y-1">
+                            <i class="fa-solid fa-microchip text-3xl text-neonCyan group-hover:scale-110 transition-transform"></i>
+                            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-300">MINE</span>
+                        </div>
+                    </button>
+                    <span id="click-power-text" class="text-xs font-mono text-slate-400 mt-3">+1 Coin per click</span>
+                </div>
+
+                <div class="flex items-center justify-between border-t border-slate-800/80 pt-4">
+                    <button onclick="buyAutoMiner()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-neonPurple text-slate-200 text-xs font-mono uppercase tracking-wider transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-robot text-neonPurple"></i>
+                        <span>Buy Rig (<span id="miner-cost">20</span> Coins)</span>
+                    </button>
+                    <span id="auto-rate" class="text-xs font-mono text-neonPurple">0 auto/sec</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Guestbook Section -->
+    <section id="contact" class="py-24 px-6 max-w-4xl mx-auto">
+        <div class="bg-cardBg border border-slate-800 rounded-3xl p-8 md:p-12 glow-box-cyan relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen"></div>
+            
+            <div class="text-center space-y-4 mb-10">
+                <h2 class="font-display font-bold text-3xl uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonGreen">
+                    // Send Transmission to JAYJAY
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Drop a message in the guestbook terminal or send a direct encrypted signal.
+                </p>
+            </div>
+
+            <form onsubmit="handleMessageSubmit(event)" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-mono text-slate-400 uppercase tracking-wider">Your Call Sign / Name</label>
+                        <input type="text" id="guest-name" required placeholder="e.g. CyberNinja" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-neonCyan transition-colors text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-mono text-slate-400 uppercase tracking-wider">Frequency / Email</label>
+                        <input type="email" id="guest-email" required placeholder="name@domain.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-neonCyan transition-colors text-sm">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-mono text-slate-400 uppercase tracking-wider">Transmission Message</label>
+                    <textarea id="guest-message" required rows="4" placeholder="Type your greeting or feedback for JAYJAY..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-neonCyan transition-colors text-sm"></textarea>
+                </div>
+                <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-neonCyan via-neonPurple to-neonGreen text-black font-bold text-sm tracking-wider uppercase glow-btn transition-all">
+                    Transmit Message <i class="fa-solid fa-satellite-dish ml-2"></i>
+                </button>
+            </form>
+
+            <!-- Success notification box -->
+            <div id="success-box" class="hidden mt-6 p-4 rounded-xl bg-neonGreen/10 border border-neonGreen/40 text-neonGreen text-center font-mono text-sm animate-pulse">
+                <i class="fa-solid fa-circle-check mr-2"></i> Transmission successfully received by JAYJAY's system!
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-12 px-6 bg-darkBg text-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="font-display font-bold text-xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonGreen">
+                JAYJAY.SYS
+            </div>
+            <p class="text-xs font-mono text-slate-500">
+                © 2026 JAYJAY's World. All digital rights reserved. Crafted with futuristic precision.
+            </p>
+            <div class="flex space-x-6 text-slate-400">
+                <a href="https://github.com/jayjay-sys" target="_blank" class="hover:text-neonCyan transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="https://twitter.com" target="_blank" class="hover:text-neonCyan transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+                <a href="https://discord.com" target="_blank" class="hover:text-neonCyan transition-colors"><i class="fa-brands fa-discord text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-slate-800 rounded-3xl p-8 max-w-lg w-full glow-box-cyan relative space-y-6">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-neonCyan text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="space-y-2">
+                <span class="text-xs font-mono text-neonCyan uppercase tracking-widest">Project Inspection</span>
+                <h3 id="modal-title" class="font-display font-bold text-2xl text-slate-100"></h3>
+            </div>
+            <p id="modal-desc" class="text-slate-300 text-sm leading-relaxed"></p>
+            <div class="pt-4 flex items-center justify-end space-x-4">
+                <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-xs font-mono uppercase tracking-wider hover:border-slate-500 transition-all">Close</button>
+                <a id="modal-link" href="#" target="_blank" class="px-5 py-2.5 rounded-xl bg-neonCyan text-black font-bold text-xs font-mono uppercase tracking-wider glow-btn">Repository <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Typing Effect in Hero Section
+        const phrases = [
+            "Digital Architect & Web Creator",
+            "Cybernetic UI/UX Enthusiast",
+            "Interactive Experience Engineer",
+            "Welcome to JAYJAY's World"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typing-text');
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) {
+                typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000; // Pause at end of phrase
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+            setTimeout(typeEffect, typeSpeed);
+        }
+        setTimeout(typeEffect, 1000);
+
+        // Particle Canvas Background
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.color = Math.random() > 0.5 ? '#00f0ff' : '#b026ff';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            const count = Math.floor((canvas.width * canvas.height) / 15000);
+            for (let i = 0; i < count; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // About Section Tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-cardBg text-slate-400 border border-slate-800 hover:border-slate-600";
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabName}`);
+            activeBtn.className = "tab-btn px-6 py-3 rounded-xl font-mono text-sm tracking-wider transition-all bg-neonCyan/20 text-neonCyan border border-neonCyan glow-box-cyan";
+        }
+
+        // Project Modal Handling
+        function openModal(title, desc, link) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('modal-link').href = link;
+            document.getElementById('project-modal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+
+        // Audio Visualizer Simulation
+        const visualizerBarsContainer = document.getElementById('visualizer-bars');
+        const barCount = 24;
+        let bars = [];
+
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'w-2 bg-gradient-to-t from-neonCyan to-neonPurple rounded-t transition-all duration-75';
+            bar.style.height = '10%';
+            visualizerBarsContainer.appendChild(bar);
+            bars.push(bar);
+        }
+
+        let isVisualizerRunning = false;
+        let visualizerInterval = null;
+
+        function toggleVisualizer() {
+            isVisualizerRunning = !isVisualizerRunning;
+            const statusEl = document.getElementById('visualizer-status');
+            const btnText = document.getElementById('vis-btn-text');
+            const visIcon = document.getElementById('vis-icon');
+
+            if (isVisualizerRunning) {
+                statusEl.textContent = 'Active Live';
+                statusEl.className = 'text-xs font-mono px-3 py-1 rounded-full bg-neonCyan/20 text-neonCyan border border-neonCyan/40 animate-pulse';
+                btnText.textContent = 'Pause Synthesizer';
+                visIcon.className = 'fa-solid fa-pause';
+
+                visualizerInterval = setInterval(() => {
+                    bars.forEach(bar => {
+                        const randomHeight = Math.floor(Math.random() * 85) + 15;
+                        bar.style.height = randomHeight + '%';
+                    });
+                }, 100);
+            } else {
+                statusEl.textContent = 'Paused';
+                statusEl.className = 'text-xs font-mono px-3 py-1 rounded-full bg-slate-900 text-slate-400 border border-slate-700';
+                btnText.textContent = 'Start Synthesizer';
+                visIcon.className = 'fa-solid fa-play';
+
+                clearInterval(visualizerInterval);
+                bars.forEach(bar => { bar.style.height = '10%'; });
+            }
+        }
+
+        // Mini Clicker Game / Cyber Coin Miner
+        let coins = 0;
+        let clickPower = 1;
+        let autoMiners = 0;
+        let minerCost = 20;
+
+        function mineCoin() {
+            coins += clickPower;
+            updateCoinDisplay();
+        }
+
+        function updateCoinDisplay() {
+            document.getElementById('coin-count').textContent = coins;
+            document.getElementById('miner-cost').textContent = minerCost;
+            document.getElementById('auto-rate').textContent = (autoMiners * 1) + ' auto/sec';
+        }
+
+        function buyAutoMiner() {
+            if (coins >= minerCost) {
+                coins -= minerCost;
+                autoMiners++;
+                minerCost = Math.floor(minerCost * 1.5);
+                updateCoinDisplay();
+            }
+        }
+
+        // Auto miner tick
+        setInterval(() => {
+            if (autoMiners > 0) {
+                coins += autoMiners;
+                updateCoinDisplay();
+            }
+        }, 1000);
+
+        // Message Form Submit
+        function handleMessageSubmit(e) {
+            e.preventDefault();
+            const successBox = document.getElementById('success-box');
+            successBox.classList.remove('hidden');
+            e.target.reset();
+            setTimeout(() => {
+                successBox.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
